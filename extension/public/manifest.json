@@ -5,8 +5,17 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "permissions": ["tabs"],
-  "host_permissions": ["<all_urls>"],
+
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+
+  "host_permissions": [
+    "https://*.supabase.co/*",
+    "wss://*.supabase.co/*"
+  ],
+
   "background": {
     "service_worker": "background.js"
   }
