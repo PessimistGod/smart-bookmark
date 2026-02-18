@@ -5,7 +5,7 @@ const urlInput = document.getElementById("url");
 const saveBtn = document.getElementById("save");
 const loginBtn = document.getElementById("login");
 
-const WEB_LOGIN_URL = "http://localhost:3000/login"; // change to prod later
+const WEB_LOGIN_URL = "https://smart-bookmark-teal-six.vercel.app/login";
 
 async function checkAuth() {
   const { data } = await supabase.auth.getSession();
@@ -37,22 +37,26 @@ saveBtn.onclick = async () => {
     return;
   }
 
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    alert("Please login first");
+    return;
+  }
+
   const { error } = await supabase.from("bookmarks").insert({
     title,
-    url
+    url,
+    domain: new URL(url).hostname,
+    user_id: user.id
   });
 
-  if (error) {
-    alert(error.message);
-  } else {
-    window.close();
-  }
+  if (error) alert(error.message);
+  else window.close();
 };
 
 loginBtn.onclick = () => {
-  chrome.tabs.create({
-    url: WEB_LOGIN_URL
-  });
+  chrome.tabs.create({ url: WEB_LOGIN_URL });
 };
 
 checkAuth();

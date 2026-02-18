@@ -52,9 +52,24 @@ export default function Bookmarks() {
   const save = async () => {
     if (!validate()) return;
 
-    if (editing)
-      await supabase.from("bookmarks").update(form).eq("id", editing);
-    else await supabase.from("bookmarks").insert(form);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return alert("Please login again");
+
+    const payload = {
+      title: form.title,
+      url: form.url,
+      domain: new URL(form.url).hostname,
+      user_id: user.id
+    };
+
+    const { error } = editing
+      ? await supabase.from("bookmarks").update(payload).eq("id", editing)
+      : await supabase.from("bookmarks").insert(payload);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
     setForm({ title: "", url: "" });
     setEditing(null);
