@@ -35,7 +35,38 @@ export default function Bookmarks() {
     setArchived(old || []);
   };
 
-  useEffect(() => { load(); }, []);
+useEffect(() => {
+  let channel;
+
+  const setupRealtime = async () => {
+    await load();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    channel = supabase
+      .channel("bookmarks-live")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "bookmarks",
+          filter: `user_id=eq.${user.id}`
+        },
+        () => load()
+      )
+      .subscribe();
+  };
+
+  setupRealtime();
+
+  return () => {
+    if (channel) supabase.removeChannel(channel);
+  };
+}, []);
+
+
 
   const validUrl = url =>
     /^(https?:\/\/)([\w-]+\.)+[\w-]+(\/[\w-._~:/?#[\]@!$&'()*+,;=]*)?$/i.test(url);
