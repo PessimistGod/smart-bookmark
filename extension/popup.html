@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+body {
+  width: 300px;
+  padding: 14px;
+  font-family: system-ui;
+  background:#f8fafc;
+}
+input {
+  width:100%;
+  padding:8px;
+  margin-bottom:8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+button {
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  background:linear-gradient(90deg,#2563eb,#1e40af);
+  color:white;
+  font-weight:600;
+}
+small {
+  color:#ef4444;
+}
+</style>
+</head>
+
+<body>
+<h3>Save Bookmark</h3>
+
+<input id="title" placeholder="Title" />
+<input id="url" placeholder="URL" />
+<small id="error"></small>
+
+<button id="save">Save</button>
+<br><br>
+<!-- <button id="login">Login</button> -->
+<button id="login" style="display:none">Login</button>
+
+
+<script type="module" src="popup.js"></script>
+</body>
+</html>
