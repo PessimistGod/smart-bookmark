@@ -76,10 +76,12 @@ C:.
 │   │
 │   └───public
 │           background.js
+│           dist.crx
 │           manifest.json
 │           supabaseClient.js
 │
 ├───public
+│       dist.pem
 │       file.svg
 │       globe.svg
 │       next.svg
@@ -120,93 +122,81 @@ C:.
 
 1.  Visit https://supabase.com
 2.  Sign in
-3.  Click "New Project"
-4.  Enter project name, database and password
-5.  Wait for provisioning to complete
+3.  Click New Project
+4.  Enter project name and database password
 
 ------------------------------------------------------------------------
 
 ### Step 2: Enable Google Authentication
 
 1.  Go to Supabase Dashboard
-2.  Navigate to Authentication -\> Configuration -\> Sign In / Providers
+2.  Navigate to Authentication → Configuration → Sign In / Providers
 3.  Enable Google
 
 ------------------------------------------------------------------------
 
 ### Step 3: Get Supabase Credentials
 
-Navigate to:
-
-Settings -\> API
+Supabase Dashboard → Settings → API
 
 Copy:
 
 -   Project URL
--   anon public key
+-   anon Publishable Key
 
 ------------------------------------------------------------------------
 
 ### Step 4: Configure Environment Variables
 
-Create a file named `.env.local` in the root directory:
+Create `.env.local`
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_public_key
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_publishable_key
 ```
-Restart your development server after adding the variables.
+Restart the development server.
 
 ------------------------------------------------------------------------
 
 ## Google OAuth Setup
 
-To obtain Google credentials:
-
 1.  Visit https://console.cloud.google.com
 2.  Create a new project
-3.  Go to APIs & Services -\> Credentials
+3.  Go to APIs & Services → Credentials
 4.  Create OAuth Client ID
-5.  Add the following redirect URI:
+5.  Add redirect URI:
 
 https://your-project-id.supabase.co/auth/v1/callback
 
-6.  Copy Client ID and Client Secret into Supabase Google provider
-    settings
+6.  Add Client ID and Secret in Supabase
 
 ------------------------------------------------------------------------
 
 ## Database Migration
 
-Open Supabase SQL Editor and execute:
+Run in Supabase SQL Editor:
 
 supabase.sql
 
-This will:
+Creates: - bookmarks table
+- RLS policies
+- indexes
+- realtime publication
+- analytics RPC
 
--   Create bookmarks table
--   Enable Row Level Security
--   Add RLS policies
--   Add indexes
--   Add realtime publication
--   Create analytics RPC function
-
-Optional reset (removes all data):
+Optional reset:
 
 reset.sql
 
 ------------------------------------------------------------------------
 
 ## Install and Run Application
-
-Install dependencies:
 ```
 npm install
 ```
-Run development server:
 ```
 npm run dev
 ```
-Application runs at:
+Open:
 ```
 http://localhost:3000
 ```
@@ -215,50 +205,38 @@ http://localhost:3000
 ## Authentication Flow
 
 -   User logs in using Google
--   Supabase creates a secure session
--   Middleware protects dashboard routes
--   RLS ensures users only access their own data
+-   Supabase creates secure session
+-   Middleware protects routes
+-   RLS restricts data per user
 
 ------------------------------------------------------------------------
 
 ## Database Security
 
-All queries are protected using:
-
+All queries enforce:
+```
 auth.uid() = user_id
-
-Policies are applied to:
-
--   SELECT
--   INSERT
--   UPDATE
--   DELETE
-
-This prevents cross-user data access and ensures secure multi-user
-architecture.
+```
+Applied to SELECT, INSERT, UPDATE, DELETE
 
 ------------------------------------------------------------------------
 
-## Analytics Implementation
+## Analytics
 
-A PostgreSQL RPC function is used:
+PostgreSQL RPC function:
 
-bookmarks_last_7_days()
+bookmarks_last_7\_days()
 
-This function groups bookmarks by date and returns daily counts for
-dashboard visualization.
+Returns daily bookmark counts.
 
 ------------------------------------------------------------------------
 
 ## Chrome Extension Setup
 
-Extension source code is located in:
-
-/extension
-
-### Build Extension
-
-Navigate into extension folder:
+Extension code is in:
+```
+cd ./extension
+```
 ```
 npm install
 ```
@@ -269,15 +247,29 @@ npm run build
 
 ### Load Extension in Chrome
 
-1.  Open Chrome
-2.  Navigate to chrome://extensions/
-3.  Enable Developer Mode
-4.  Click Load Unpacked
-5.  Select:
+1.  Open chrome://extensions
+2.  Enable Developer Mode
+3.  Click Load Unpacked
+4.  Select extension/dist
 
-extension/dist
+------------------------------------------------------------------------
 
-The extension will appear in the toolbar.
+## Chrome Extension OAuth Configuration
+
+After loading the extension:
+
+1.  Go to chrome://extensions
+2.  Copy the Extension ID
+
+Add this redirect URL in Supabase:
+
+https://YOUR_EXTENSION_ID.chromiumapp.org/oauth2
+
+Keep the main project callback:
+
+https://your-project-id.supabase.co/auth/v1/callback
+
+This enables Google login inside the extension.
 
 ------------------------------------------------------------------------
 
@@ -285,80 +277,49 @@ The extension will appear in the toolbar.
 
 ### Learning Supabase
 
-Supabase was new to me when starting this project. I had to learn:
-
 -   Authentication flow
 -   Session handling
--   Row Level Security policies
+-   Row Level Security
 -   PostgreSQL functions
 -   Realtime subscriptions
--   Migration-safe SQL practices
-
-Understanding RLS behavior and debugging policy errors was one of the
-most valuable learning experiences.
-
-------------------------------------------------------------------------
 
 ### Building the Chrome Extension
 
-Developing the Chrome extension introduced challenges such as:
-
 -   Manifest v3 configuration
--   Background service workers
--   Permission management
--   Integrating Supabase with extension context
--   Handling CORS and authentication
+-   Supabase integration in extension context
+-   Understanding Chrome extension architecture
 
-Debugging extension-specific errors required inspecting browser logs and
-understanding extension architecture.
+### Problem Solving
 
-------------------------------------------------------------------------
-
-### Problem Solving Approach
-
-During development, I actively used:
-
--   StackOverflow for debugging edge cases
--   YouTube for Supabase and extension tutorials
--   OpenAI tools for understanding SQL, RLS policies, and architecture
-    decisions
-
-These resources helped accelerate learning and problem-solving.
+-   StackOverflow
+-   YouTube tutorials
+-   OpenAI / Chatgpt
 
 ------------------------------------------------------------------------
 
 ## Supabase Production Checklist
 
--   RLS enabled on all tables
--   OAuth redirect URLs updated for production domain
--   Realtime publication includes bookmarks table
--   Environment variables configured in hosting provider
+-   RLS enabled
+-   OAuth redirect URLs configured
+-   Realtime publication enabled
+-   Environment variables set
 
 ------------------------------------------------------------------------
 
 ## Troubleshooting
 
-### Login Issues
+Login issues: - Verify OAuth redirect URLs
+- Restart server
 
--   Verify Google OAuth redirect URI
--   Check environment variables
--   Restart development server
+Insert errors: - Ensure user_id is passed
+- Check RLS policies
 
-### Insert Errors
-
--   Ensure user_id is included in inserts
--   Confirm RLS policies are properly created
-
-### Realtime Issues
-
--   Verify bookmarks table is added to supabase_realtime publication
+Realtime issues: - Ensure table is in realtime publication
 
 ------------------------------------------------------------------------
 
 ## Author
 
-Rahul R
-
-Email: rahulramesh0004@gmail.com
-
-Phone: +91 98869 93842
+Rahul R\
+rahulramesh0004@gmail.com\
++91 98869 93842
