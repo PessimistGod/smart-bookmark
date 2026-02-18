@@ -1,49 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<style>
-body {
-  width: 300px;
-  padding: 14px;
-  font-family: system-ui;
-  background:#f8fafc;
-}
-input {
-  width:100%;
-  padding:8px;
-  margin-bottom:8px;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-button {
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:linear-gradient(90deg,#2563eb,#1e40af);
-  color:white;
-  font-weight:600;
-}
-small {
-  color:#ef4444;
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>Smart Bookmark</title>
+
+  <style>
+    body {
+      width: 320px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 12px;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #38bdf8;
+    }
+
+    input {
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 13px;
+    }
+
+    button {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    #save {
+      background: #2563eb;
+      color: white;
+    }
+
+    #login {
+      background: #334155;
+      color: #e5e7eb;
+    }
+
+    #view {
+      background: #0ea5e9;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 
 <body>
-<h3>Save Bookmark</h3>
+  <h2>Smart Bookmark</h2>
 
-<input id="title" placeholder="Title" />
-<input id="url" placeholder="URL" />
-<small id="error"></small>
+  <input id="title" placeholder="Page title" />
+  <input id="url" placeholder="Page URL" />
 
-<button id="save">Save</button>
-<br><br>
-<!-- <button id="login">Login</button> -->
-<button id="login" style="display:none">Login</button>
+  <button id="save">Save Bookmark</button>
 
+  <button id="login">Login with Google</button>
 
-<script type="module" src="popup.js"></script>
+  <button id="view" style="display:none">
+    View all bookmarks
+  </button>
+
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

@@ -1,3 +1,3 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("Smart Bookmark Extension Installed");
+  console.log("Smart Bookmark extension installed");
 });
