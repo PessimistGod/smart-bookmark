@@ -16,16 +16,16 @@ export default function DashboardLayout({ children }) {
       window.history.replaceState(null, "", window.location.pathname);
     }
 
-    const enforceAuth = async () => {
-      const { data } = await supabase.auth.getSession();
+    // const enforceAuth = async () => {
+    //   const { data } = await supabase.auth.getSession();
 
-      if (!data.session) {
-        await supabase.auth.signOut();
-        router.replace("/login");
-      }
-    };
+    //   if (!data.session) {
+    //     await supabase.auth.signOut();
+    //     router.replace("/login");
+    //   }
+    // };
 
-    enforceAuth();
+    // enforceAuth();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {

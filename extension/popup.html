@@ -1,80 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Smart Bookmark</title>
+<meta charset="UTF-8" />
+<title>Smart Bookmark</title>
 
-  <style>
-    body {
-      width: 320px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      padding: 12px;
-      background: #0f172a;
-      color: #e5e7eb;
-    }
+<style>
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --accent: #0ea5e9;
+  --danger: #ef4444;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+}
 
-    h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      color: #38bdf8;
-    }
+* { box-sizing: border-box; }
 
-    input {
-      width: 100%;
-      padding: 6px 8px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      font-size: 13px;
-    }
+body {
+  width: 340px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 14px;
+}
 
-    button {
-      width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 6px;
-    }
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
 
-    #save {
-      background: #2563eb;
-      color: white;
-    }
+.brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 14px;
+}
 
-    #login {
-      background: #334155;
-      color: #e5e7eb;
-    }
+input {
+  width: 100%;
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  outline: none;
+}
 
-    #view {
-      background: #0ea5e9;
-      color: white;
-    }
+input:focus {
+  border-color: var(--primary);
+}
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  </style>
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+button {
+  border: none;
+  padding: 11px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.secondary {
+  background: #f1f5f9;
+  color: var(--text);
+}
+
+.view {
+  background: var(--accent);
+  color: white;
+}
+
+.logout {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.hidden {
+  display: none;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+</style>
+
 </head>
 
 <body>
-  <h2>Smart Bookmark</h2>
+  <div class="card">
 
-  <input id="title" placeholder="Page title" />
-  <input id="url" placeholder="Page URL" />
+    <div class="header">
+      <div class="brand">Smart Bookmark</div>
+    </div>
 
-  <button id="save">Save Bookmark</button>
+    <input id="title" placeholder="Page title" />
+    <input id="url" placeholder="Page URL" />
 
-  <button id="login">Login with Google</button>
+<button id="save" class="primary">Save</button>
 
-  <button id="view" style="display:none">
-    View all bookmarks
-  </button>
+<button id="login" class="secondary">Continue with Google</button>
 
-  <script type="module" src="popup.js"></script>
+<div class="actions">
+  <button id="view" class="view hidden">Dashboard</button>
+  <button id="logout" class="logout hidden">Logout</button>
+</div>
+
+
+ 
+
+  </div>
+
+<script type="module" src="popup.js"></script>
 </body>
 </html>
