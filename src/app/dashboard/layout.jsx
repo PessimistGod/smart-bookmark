@@ -12,29 +12,17 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname);
-    }
-
-    // const enforceAuth = async () => {
-    //   const { data } = await supabase.auth.getSession();
-
-    //   if (!data.session) {
-    //     await supabase.auth.signOut();
-    //     router.replace("/login");
-    //   }
-    // };
-
-    // enforceAuth();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!session) router.replace("/login");
+  const { data: listener } = supabase.auth.onAuthStateChange(
+    (event, session) => {
+      if (event === "SIGNED_OUT") {
+        router.replace("/login");
       }
-    );
+    }
+  );
 
-    return () => listener.subscription.unsubscribe();
-  }, [router]);
+  return () => listener.subscription.unsubscribe();
+}, [router]);
+
 
   const navItem = (href, label, Icon) => {
     const active = pathname === href;
